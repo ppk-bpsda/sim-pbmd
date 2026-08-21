@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-surface-muted text-slate-800 antialiased;
+}
+
+/* Fokus keyboard tetap terlihat (aksesibilitas) */
+:focus-visible {
+  outline: 2px solid theme("colors.brand.600");
+  outline-offset: 2px;
+}
+
+/* ===========================================================
+   PRINT STYLESHEET — dipakai halaman laporan (§8 Blueprint)
+   Elemen dengan class .no-print disembunyikan saat dicetak,
+   elemen .print-area menjadi satu-satunya konten yang tercetak.
+   =========================================================== */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .print-area {
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
