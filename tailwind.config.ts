@@ -1,22 +1,24 @@
 import type { Config } from "tailwindcss";
 
 // Design tokens SIM-PBMD
-// Palet: profesional, terpercaya, tidak ramai — dasar navy gelap untuk sidebar/topbar,
-// putih/abu muda untuk kanvas kerja, aksen biru untuk aksi utama, dan warna status
-// (hijau/kuning/merah) hanya dipakai untuk indikator status, bukan dekorasi.
+// Palet: profesional, terpercaya, tidak ramai — dasar MAROON tua untuk sidebar/topbar
+// (identitas visual yang berbeda dari kebanyakan aplikasi biru/hijau), putih/abu muda
+// untuk kanvas kerja, aksen maroon untuk aksi utama, dan warna status (hijau/kuning/merah)
+// TETAP dipertahankan terpisah dari brand agar makna status tidak pernah rancu dengan
+// warna identitas aplikasi (mis. tombol "Hapus" tidak boleh terlihat sama seperti brand).
 const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
         brand: {
-          900: "#0B1E33", // navy tua - sidebar/topbar
-          800: "#0F2A47",
-          700: "#15375C",
-          600: "#1D4E89", // aksen biru - tombol utama
-          500: "#2B6CB0",
-          100: "#E7EEF6", // background section highlight
-          50: "#F5F8FB",
+          900: "#3A0B16", // maroon sangat tua - sidebar/topbar
+          800: "#4C0F1D",
+          700: "#601526",
+          600: "#7A1B30", // aksen maroon utama - tombol/aksi primer
+          500: "#96233C",
+          100: "#F3E4E7", // background section highlight (tint lembut, bukan pink mencolok)
+          50: "#FAF3F4",
         },
         surface: {
           DEFAULT: "#FFFFFF",
@@ -30,8 +32,8 @@ const config: Config = {
           warningBg: "#FEF3E0",
           danger: "#C13A3A",
           dangerBg: "#FBEAEA",
-          info: "#2B6CB0",
-          infoBg: "#E7EEF6",
+          info: "#3F4C63", // slate netral, bukan biru terang — sekadar warna semantik "informasi", bukan identitas aplikasi
+          infoBg: "#EEF0F3",
         },
       },
       fontFamily: {

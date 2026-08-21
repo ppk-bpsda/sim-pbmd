@@ -1,6 +1,27 @@
 import { Bell, Search } from "lucide-react";
+import { UserMenu } from "@/components/layout/UserMenu";
+import type { CurrentUser } from "@/repositories/profileRepository";
 
-export function Topbar() {
+const ROLE_LABELS: Record<string, string> = {
+  SUPER_ADMIN: "Super Admin",
+  ADMIN: "Admin",
+  OPERATOR: "Operator",
+  VERIFIKATOR: "Verifikator",
+  PIMPINAN: "Pimpinan",
+  AUDITOR: "Auditor",
+};
+
+function getInitials(name: string) {
+  const parts = name.trim().split(/\s+/).slice(0, 2);
+  return parts.map((p) => p[0]?.toUpperCase() ?? "").join("") || "U";
+}
+
+export function Topbar({ user }: { user: CurrentUser }) {
+  const roleLabel = user.roles.length
+    ? user.roles.map((r) => ROLE_LABELS[r] ?? r).join(", ")
+    : "Belum ada role";
+  const roleWithUnit = user.unitName ? `${roleLabel} — ${user.unitName}` : roleLabel;
+
   return (
     <header className="flex h-16 items-center justify-between border-b border-surface-border bg-white px-4 md:px-6">
       <div className="flex flex-1 items-center gap-3">
@@ -21,15 +42,7 @@ export function Topbar() {
         >
           <Bell className="h-5 w-5" />
         </button>
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-xs font-semibold text-brand-700">
-            AD
-          </div>
-          <div className="hidden text-left leading-tight md:block">
-            <p className="text-sm font-medium text-slate-700">Nama Pengguna</p>
-            <p className="text-[11px] text-slate-400">Role — Unit Kerja</p>
-          </div>
-        </div>
+        <UserMenu fullName={user.fullName} roleLabel={roleWithUnit} initials={getInitials(user.fullName)} />
       </div>
     </header>
   );

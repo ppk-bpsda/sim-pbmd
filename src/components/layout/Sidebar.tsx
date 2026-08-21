@@ -5,8 +5,11 @@ import { usePathname } from "next/navigation";
 import { MODULE_NAV } from "@/constants/modules";
 import { cn } from "@/lib/utils";
 
-export function Sidebar() {
+export function Sidebar({ roles = [] }: { roles?: string[] }) {
   const pathname = usePathname();
+  const visibleNav = MODULE_NAV.filter(
+    (item) => !item.hiddenForRoles?.some((r) => roles.includes(r))
+  );
 
   return (
     <aside className="hidden w-64 shrink-0 flex-col bg-brand-900 text-white md:flex">
@@ -21,7 +24,7 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-2">
-        {MODULE_NAV.map((item) => {
+        {visibleNav.map((item) => {
           const active = pathname === item.href || pathname.startsWith(item.href + "/");
           const Icon = item.icon;
           return (

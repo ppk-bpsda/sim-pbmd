@@ -124,6 +124,17 @@ insert into public.budget_accounts (code, name) values
   ('5.1.02.02.09', 'Belanja Pajak Kendaraan Bermotor');
 
 -- -------------------------------------------------------------
+-- THRESHOLD NOTIFIKASI default (§35) — nilai awal, dapat diubah admin
+-- kapan saja lewat menu Pengaturan tanpa mengubah kode aplikasi.
+-- -------------------------------------------------------------
+insert into public.alert_settings (code, value_numeric, description) values
+  ('TAX_DUE_REMINDER_DAYS', 30, 'Ingatkan H- sebelum pajak kendaraan jatuh tempo'),
+  ('STNK_DUE_REMINDER_DAYS', 30, 'Ingatkan H- sebelum STNK jatuh tempo'),
+  ('KIR_DUE_REMINDER_DAYS', 14, 'Ingatkan H- sebelum KIR jatuh tempo'),
+  ('BUDGET_WARNING_PCT', 80, 'Persentase realisasi untuk notifikasi peringatan pagu'),
+  ('BUDGET_CRITICAL_PCT', 90, 'Persentase realisasi untuk notifikasi kritis pagu');
+
+-- -------------------------------------------------------------
 -- CATATAN PENTING
 -- -------------------------------------------------------------
 -- User SUPER_ADMIN pertama TIDAK dibuat lewat seed SQL (karena harus terhubung

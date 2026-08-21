@@ -32,9 +32,12 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const isAuthRoute = request.nextUrl.pathname.startsWith("/login");
-  const isDashboardRoute = request.nextUrl.pathname.startsWith("/dashboard");
 
-  if (!user && isDashboardRoute) {
+  // Aplikasi ini tidak punya halaman publik selain /login (§20: default deny).
+  // Route group "(dashboard)" TIDAK menambah prefix "/dashboard" pada URL asli
+  // (mis. "/profile", "/assets" tetap di path root), jadi seluruh path SELAIN
+  // /login diperlakukan sebagai privat.
+  if (!user && !isAuthRoute) {
     const redirectUrl = new URL("/login", request.url);
     return NextResponse.redirect(redirectUrl);
   }

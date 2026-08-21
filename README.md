@@ -5,9 +5,11 @@ Aplikasi pencatatan, pengendalian, monitoring, rekapitulasi, analisis, dan pendo
 kegiatan pemeliharaan Barang Milik Daerah (BMD) — mencakup pemeliharaan peralatan/mesin,
 kendaraan dinas, komputer, mebel, anggaran pemeliharaan, hingga laporan realisasi.
 
-> **Status: Phase 1 — Project Foundation.** Skeleton project, struktur folder, dan koneksi
-> Supabase sudah siap. Fitur (autentikasi, transaksi, dsb.) belum aktif — lihat roadmap di
-> `docs/architecture.md`.
+> **Status: Phase 1–3 selesai.** Project foundation, database schema lengkap (migration
+> 0001–0010 + RLS), dan autentikasi (login/logout/profil, role-aware navigation) sudah
+> aktif dan terhubung Supabase sungguhan. Modul transaksi (Master BMD, Pemeliharaan,
+> Kendaraan, dst.) masih placeholder — menyusul Phase 4 dst. Identitas warna aplikasi:
+> **Maroon** (bukan biru/hijau), lihat token warna di `tailwind.config.ts`.
 
 ---
 
