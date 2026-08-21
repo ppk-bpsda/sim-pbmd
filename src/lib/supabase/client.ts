@@ -1,7 +1,14 @@
 "use client";
 
 import { createBrowserClient } from "@supabase/ssr";
-import type { Database } from "@/types/database";
+// NOTE: generic <Database> SENGAJA belum dipasang di sini. Placeholder tipe
+// permisif di src/types/database.ts justru membuat TypeScript meng-infer
+// 'never' pada beberapa hasil query (.update(), .select() kolom tertentu),
+// bukan 'any' seperti yang diharapkan — jadi untuk sementara client dibiarkan
+// tanpa generic (query bertipe permisif penuh). Setelah `npm run db:types`
+// menghasilkan tipe Database ASLI dari schema Supabase (bukan placeholder),
+// pasang kembali sebagai createBrowserClient<Database>(...) agar seluruh
+// query di aplikasi otomatis type-safe penuh.
 
 /**
  * Supabase client untuk digunakan di dalam Client Component.
@@ -17,5 +24,5 @@ export function createClient() {
     );
   }
 
-  return createBrowserClient<Database>(url, anonKey);
+  return createBrowserClient(url, anonKey);
 }

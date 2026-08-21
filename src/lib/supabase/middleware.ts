@@ -7,7 +7,7 @@ import { NextResponse, type NextRequest } from "next/server";
  * Ini adalah lapisan kenyamanan UX saja — otorisasi sesungguhnya tetap ditegakkan oleh RLS.
  */
 export async function updateSession(request: NextRequest) {
-  let response = NextResponse.next({ request: { headers: request.headers } });
+  const response = NextResponse.next({ request: { headers: request.headers } });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * PLACEHOLDER SEMENTARA — file ini WAJIB digantikan otomatis oleh:
  *   npm run db:types
@@ -6,11 +7,11 @@
  * supabase/migrations/ dan tidak pernah diketik manual.
  *
  * Sebelum digenerate, tipe di bawah ini SENGAJA dibuat permisif secara
- * struktural (bukan kosong) agar query .from("nama_tabel") tidak diblokir
- * TypeScript selama Phase 3–9 berjalan, TANPA mengorbankan pengecekan tipe
- * lain di sekitar pemanggilnya. Setelah `npm run db:types` dijalankan,
- * setiap .from("assets"), .select(...), dst. akan otomatis type-safe penuh
- * (kolom yang salah ketik akan gagal build) tanpa perlu ubah kode pemanggil.
+ * struktural (bukan kosong) dengan `any` di beberapa tempat — karena itu
+ * `no-explicit-any` dimatikan khusus untuk file ini (bukan project-wide).
+ * File ini SAAT INI belum dipakai oleh lib/supabase/client.ts atau server.ts
+ * (lihat catatan di kedua file tsb.) — baru dipasang kembali sebagai generic
+ * SupabaseClient<Database> setelah tipe asli digenerate.
  */
 export type Json =
   | string
@@ -20,7 +21,6 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type PermissiveTable = {
   Row: Record<string, any>;
   Insert: Record<string, any>;

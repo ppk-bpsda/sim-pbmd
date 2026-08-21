@@ -1,6 +1,8 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import type { Database } from "@/types/database";
+// NOTE: lihat penjelasan di lib/supabase/client.ts — generic <Database> sengaja
+// belum dipasang sampai `npm run db:types` menghasilkan tipe asli dari schema
+// Supabase (placeholder saat ini membuat TypeScript salah infer 'never').
 
 /**
  * Supabase client untuk digunakan di Server Component, Server Action, dan Route Handler.
@@ -19,7 +21,7 @@ export function createClient() {
     );
   }
 
-  return createServerClient<Database>(url, anonKey, {
+  return createServerClient(url, anonKey, {
     cookies: {
       get(name: string) {
         return cookieStore.get(name)?.value;
