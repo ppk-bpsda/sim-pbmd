@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
-import { loginAction, type LoginActionState } from "./actions";
+import { loginAction, type LoginActionState } from "@/app/(auth)/login/actions";
 
 const initialState: LoginActionState = { error: null };
 
