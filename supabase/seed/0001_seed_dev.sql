@@ -104,6 +104,14 @@ insert into public.funding_sources (code, name) values
 insert into public.fiscal_years (year, is_active) values (2026, true);
 
 -- -------------------------------------------------------------
+-- PENYEDIA (vendor) contoh — data dummy, bukan penyedia sebenarnya
+-- -------------------------------------------------------------
+insert into public.vendors (code, name, phone) values
+  ('VDR-001', 'CV Sinar Motor Jaya', '021-5550101'),
+  ('VDR-002', 'CV Berkah Elektronik', '021-5550102'),
+  ('VDR-003', 'CV Mebel Abadi', '021-5550103');
+
+-- -------------------------------------------------------------
 -- PROGRAM/KEGIATAN/SUB KEGIATAN contoh
 -- -------------------------------------------------------------
 insert into public.programs (code, name) values ('PRG-01', 'Program Penunjang Urusan Pemerintahan');

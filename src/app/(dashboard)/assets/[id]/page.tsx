@@ -3,9 +3,14 @@ import { notFound } from "next/navigation";
 import { Pencil, Trash2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getAssetById } from "@/repositories/assetRepository";
+import {
+  getTotalMaintenanceCostForAsset,
+  getMaintenanceHistoryForAsset,
+} from "@/repositories/maintenanceRepository";
 import { softDeleteAssetAction } from "../actions";
 import { CONDITION_BADGE_CLASS, conditionLabel, type AssetCondition } from "@/constants/asset";
-import { formatCurrency, formatNumber } from "@/lib/format";
+import { STATUS_BADGE_CLASS, STATUS_LABELS, type TransactionStatus } from "@/constants/maintenance";
+import { formatCurrency, formatDate, formatNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
@@ -19,7 +24,11 @@ function DetailRow({ label, value }: { label: string; value: React.ReactNode }) 
 
 export default async function AssetDetailPage({ params }: { params: { id: string } }) {
   const supabase = createClient();
-  const asset = await getAssetById(supabase, params.id);
+  const [asset, totalMaintenanceCost, maintenanceHistory] = await Promise.all([
+    getAssetById(supabase, params.id),
+    getTotalMaintenanceCostForAsset(supabase, params.id),
+    getMaintenanceHistoryForAsset(supabase, params.id),
+  ]);
 
   if (!asset) {
     notFound();
@@ -80,17 +89,47 @@ export default async function AssetDetailPage({ params }: { params: { id: string
         <div className="space-y-4">
           <div className="rounded-card border border-surface-border bg-white p-5 shadow-card">
             <h2 className="mb-1 text-sm font-semibold text-slate-700">Total Biaya Pemeliharaan</h2>
-            <p className="text-2xl font-semibold text-slate-800">Rp 0</p>
+            <p className="text-2xl font-semibold text-slate-800">{formatCurrency(totalMaintenanceCost)}</p>
             <p className="mt-1 text-xs text-slate-400">
-              Dihitung otomatis dari transaksi APPROVED/POSTED — aktif setelah Phase 5.
+              Dihitung otomatis dari transaksi berstatus Disetujui/Diposting (§55: setiap angka
+              wajib bersumber dari transaksi database, bukan nilai tetap).
             </p>
           </div>
 
-          <div className="rounded-card border border-dashed border-surface-border bg-white p-5 text-sm text-slate-400 shadow-card">
-            <h2 className="mb-2 text-sm font-semibold text-slate-700">Riwayat Pemeliharaan</h2>
-            Daftar transaksi pemeliharaan aset ini (§6, §54 traceability) akan tampil di sini
-            begitu modul Pemeliharaan (Phase 5) tersedia. Setiap baris nantinya dapat diklik
-            untuk melihat transaksi sumber, dokumen bukti, dan riwayat audit.
+          <div className="rounded-card border border-surface-border bg-white shadow-card">
+            <h2 className="border-b border-surface-border px-5 py-3 text-sm font-semibold text-slate-700">
+              Riwayat Pemeliharaan
+            </h2>
+            {maintenanceHistory.length === 0 ? (
+              <p className="px-5 py-6 text-center text-sm text-slate-400">
+                Belum ada transaksi pemeliharaan untuk aset ini.
+              </p>
+            ) : (
+              <ul className="divide-y divide-surface-border">
+                {maintenanceHistory.map((h) => (
+                  <li key={h.id} className="px-5 py-3">
+                    <Link href={`/maintenance/${h.id}`} className="block hover:bg-surface-muted/60">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-sm font-medium text-brand-700">{h.transaction_number}</p>
+                        <span
+                          className={cn(
+                            "rounded-full px-2 py-0.5 text-[11px] font-medium",
+                            STATUS_BADGE_CLASS[h.status as TransactionStatus]
+                          )}
+                        >
+                          {STATUS_LABELS[h.status as TransactionStatus]}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-500">{h.maintenance_types?.name ?? "-"}</p>
+                      <div className="mt-1 flex items-center justify-between text-xs text-slate-400">
+                        <span>{formatDate(h.transaction_date)}</span>
+                        <span className="font-medium text-slate-600">{formatCurrency(h.amount)}</span>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </div>

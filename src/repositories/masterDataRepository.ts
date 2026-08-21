@@ -69,3 +69,86 @@ export async function getUnits(
   const { data } = await query;
   return data ?? [];
 }
+
+// =============================================================
+// Master data untuk form Transaksi Pemeliharaan (Phase 5)
+// =============================================================
+
+export type SimpleOption = { id: string; code: string; name: string };
+
+export async function getMaintenanceTypes(supabase: AnySupabase): Promise<SimpleOption[]> {
+  const { data } = await supabase
+    .from("maintenance_types")
+    .select("id, code, name")
+    .eq("is_active", true)
+    .order("name", { ascending: true });
+  return data ?? [];
+}
+
+export async function getVendors(supabase: AnySupabase): Promise<SimpleOption[]> {
+  const { data } = await supabase
+    .from("vendors")
+    .select("id, name")
+    .eq("is_active", true)
+    .order("name", { ascending: true });
+  return (data ?? []).map((v: { id: string; name: string }) => ({ id: v.id, code: "", name: v.name }));
+}
+
+export async function getFundingSources(supabase: AnySupabase): Promise<SimpleOption[]> {
+  const { data } = await supabase
+    .from("funding_sources")
+    .select("id, code, name")
+    .eq("is_active", true)
+    .order("name", { ascending: true });
+  return data ?? [];
+}
+
+export async function getBudgetAccounts(supabase: AnySupabase): Promise<SimpleOption[]> {
+  const { data } = await supabase
+    .from("budget_accounts")
+    .select("id, code, name")
+    .eq("is_active", true)
+    .order("code", { ascending: true });
+  return data ?? [];
+}
+
+export type FiscalYearOption = { id: string; year: number; is_active: boolean; is_locked: boolean };
+
+export async function getFiscalYears(supabase: AnySupabase): Promise<FiscalYearOption[]> {
+  const { data } = await supabase
+    .from("fiscal_years")
+    .select("id, year, is_active, is_locked")
+    .order("year", { ascending: false });
+  return data ?? [];
+}
+
+export async function getPrograms(supabase: AnySupabase): Promise<SimpleOption[]> {
+  const { data } = await supabase
+    .from("programs")
+    .select("id, code, name")
+    .eq("is_active", true)
+    .order("name", { ascending: true });
+  return data ?? [];
+}
+
+export type ActivityOption = SimpleOption & { program_id: string };
+
+export async function getActivities(supabase: AnySupabase): Promise<ActivityOption[]> {
+  const { data } = await supabase
+    .from("activities")
+    .select("id, program_id, code, name")
+    .eq("is_active", true)
+    .order("name", { ascending: true });
+  return data ?? [];
+}
+
+export type SubactivityOption = SimpleOption & { activity_id: string };
+
+export async function getSubactivities(supabase: AnySupabase): Promise<SubactivityOption[]> {
+  const { data } = await supabase
+    .from("subactivities")
+    .select("id, activity_id, code, name")
+    .eq("is_active", true)
+    .order("name", { ascending: true });
+  return data ?? [];
+}
