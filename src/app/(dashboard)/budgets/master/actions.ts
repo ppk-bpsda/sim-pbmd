@@ -12,11 +12,28 @@ import {
 
 export type MasterActionState = { error: string | null };
 
-function duplicateOrGenericError(error: { code?: string } | null, label: string): MasterActionState {
-  if (error?.code === "23505") {
+function duplicateOrGenericError(
+  error: { code?: string; message?: string } | null,
+  label: string
+): MasterActionState {
+  if (!error) return { error: null };
+
+  // Log detail teknis ke server (terlihat di log Vercel/terminal `next dev`),
+  // TIDAK ditampilkan ke pengguna (§39) — tapi memudahkan diagnosa saat
+  // menghubungkan ke database baru.
+  console.error(`[master-data:${label}]`, error.code, error.message);
+
+  if (error.code === "23505") {
     return { error: `Kode ${label} tersebut sudah digunakan.` };
   }
-  return { error: `Data tidak dapat disimpan. Pastikan Anda memiliki hak akses (Admin).` };
+  if (error.code === "42501") {
+    return {
+      error: `Akun Anda belum memiliki role Admin/Super Admin di database ini, sehingga tidak diizinkan menambah ${label}. Periksa tabel user_roles untuk akun Anda.`,
+    };
+  }
+  return {
+    error: `Data ${label} tidak dapat disimpan karena kesalahan teknis. Detail teknisnya sudah dicatat di log server — silakan periksa log atau hubungi developer.`,
+  };
 }
 
 export async function createBudgetAccountAction(
