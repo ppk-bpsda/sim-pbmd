@@ -5,11 +5,13 @@ Aplikasi pencatatan, pengendalian, monitoring, rekapitulasi, analisis, dan pendo
 kegiatan pemeliharaan Barang Milik Daerah (BMD) — mencakup pemeliharaan peralatan/mesin,
 kendaraan dinas, komputer, mebel, anggaran pemeliharaan, hingga laporan realisasi.
 
-> **Status: Phase 1–5 selesai.** Project foundation, database schema lengkap, autentikasi,
-> **Master BMD**, dan **Pemeliharaan** (transaksi + workflow status Draf→Diajukan→
-> Terverifikasi→Disetujui→Diposting, riwayat status/audit trail, traceability biaya per
-> aset) sudah aktif dan terhubung Supabase sungguhan. Modul Kendaraan, BBM, Anggaran, dst.
-> masih placeholder — menyusul Phase 6 dst. Identitas warna aplikasi: **Maroon**.
+> **Status: Phase 1–6 selesai.** Project foundation, database schema, autentikasi,
+> **Master BMD**, **Pemeliharaan**, dan **Kendaraan** (Noka/Nosin/Nopol, dokumen
+> STNK/Pajak/KIR dengan indikator jatuh tempo, BBM, **alokasi anggaran per kendaraan
+> yang CONFIGURABLE**, dan rekap Noka/Nosin/Nopol × jumlah pemeliharaan × jumlah BBM ×
+> realisasi anggaran) sudah aktif dan terhubung Supabase sungguhan. Modul Anggaran
+> (agregat lintas kendaraan), Import, Laporan, dan Dashboard masih placeholder —
+> menyusul Phase 7 dst. Identitas warna aplikasi: **Maroon**.
 
 ---
 
