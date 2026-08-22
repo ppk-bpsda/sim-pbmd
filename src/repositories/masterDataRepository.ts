@@ -152,3 +152,32 @@ export async function getSubactivities(supabase: AnySupabase): Promise<Subactivi
     .order("name", { ascending: true });
   return data ?? [];
 }
+
+// =============================================================
+// Master data untuk modul Kendaraan (Phase 6)
+// =============================================================
+
+export async function getVehicleCategories(supabase: AnySupabase): Promise<SimpleOption[]> {
+  const { data } = await supabase
+    .from("vehicle_categories")
+    .select("id, code, name")
+    .eq("is_active", true)
+    .order("name", { ascending: true });
+  return data ?? [];
+}
+
+/**
+ * Kategori aset dengan kode 'KENDARAAN' — dipakai sebagai category_id
+ * default & terkunci saat membuat aset baru lewat modul Kendaraan, supaya
+ * konsisten dan tidak perlu admin memilih manual setiap kali (kode dicari
+ * by text, bukan hardcode UUID, tetap CONFIGURABLE bila admin mengubah
+ * struktur kategori).
+ */
+export async function getVehicleAssetCategoryId(supabase: AnySupabase): Promise<string | null> {
+  const { data } = await supabase
+    .from("asset_categories")
+    .select("id")
+    .eq("code", "KENDARAAN")
+    .maybeSingle();
+  return data?.id ?? null;
+}
