@@ -6,17 +6,20 @@ export function MaintenanceFilters({
   units,
   fiscalYears,
   maintenanceTypes,
+  budgetAccounts,
   defaultValues,
 }: {
   units: UnitOption[];
   fiscalYears: FiscalYearOption[];
   maintenanceTypes: SimpleOption[];
+  budgetAccounts: SimpleOption[];
   defaultValues: {
     search?: string;
     status?: string;
     unitId?: string;
     fiscalYearId?: string;
     maintenanceTypeId?: string;
+    budgetAccountId?: string;
   };
 }) {
   return (
@@ -73,6 +76,18 @@ export function MaintenanceFilters({
         {maintenanceTypes.map((t) => (
           <option key={t.id} value={t.id}>
             {t.name}
+          </option>
+        ))}
+      </select>
+      <select
+        name="account"
+        defaultValue={defaultValues.budgetAccountId ?? ""}
+        className="rounded-md border border-surface-border px-3 py-2 text-sm focus:border-brand-500 focus:outline-none"
+      >
+        <option value="">Semua Rekening</option>
+        {budgetAccounts.map((a) => (
+          <option key={a.id} value={a.id}>
+            {a.code} — {a.name}
           </option>
         ))}
       </select>

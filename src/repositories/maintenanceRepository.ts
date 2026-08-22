@@ -3,10 +3,11 @@ type AnySupabase = any;
 
 export type MaintenanceListFilters = {
   search?: string;
-  status?: string;
+  status?: string; // bisa satu status ("APPROVED") atau gabungan ("APPROVED,POSTED") untuk drill-down realisasi
   unitId?: string;
   fiscalYearId?: string;
   maintenanceTypeId?: string;
+  budgetAccountId?: string;
   page?: number;
   pageSize?: number;
 };
@@ -59,10 +60,14 @@ export async function listMaintenanceTransactions(
       `transaction_number.ilike.%${term}%,proof_number.ilike.%${term}%,description.ilike.%${term}%`
     );
   }
-  if (filters.status) query = query.eq("status", filters.status);
+  if (filters.status) {
+    const statuses = filters.status.split(",").map((s) => s.trim()).filter(Boolean);
+    query = statuses.length > 1 ? query.in("status", statuses) : query.eq("status", statuses[0]);
+  }
   if (filters.unitId) query = query.eq("unit_id", filters.unitId);
   if (filters.fiscalYearId) query = query.eq("fiscal_year_id", filters.fiscalYearId);
   if (filters.maintenanceTypeId) query = query.eq("maintenance_type_id", filters.maintenanceTypeId);
+  if (filters.budgetAccountId) query = query.eq("budget_account_id", filters.budgetAccountId);
 
   const { data, count } = await query;
 

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { listMaintenanceTransactions, type MaintenanceListRow } from "@/repositories/maintenanceRepository";
-import { getUnits, getFiscalYears, getMaintenanceTypes } from "@/repositories/masterDataRepository";
+import { getUnits, getFiscalYears, getMaintenanceTypes, getBudgetAccounts } from "@/repositories/masterDataRepository";
 import { MaintenanceFilters } from "./MaintenanceFilters";
 import { Pagination } from "@/components/ui/Pagination";
 import { STATUS_BADGE_CLASS, STATUS_LABELS, type TransactionStatus } from "@/constants/maintenance";
@@ -18,21 +18,24 @@ export default async function MaintenancePage({
     unit?: string;
     fiscal_year?: string;
     type?: string;
+    account?: string;
     page?: string;
   };
 }) {
   const supabase = createClient();
 
-  const [units, fiscalYears, maintenanceTypes, result] = await Promise.all([
+  const [units, fiscalYears, maintenanceTypes, budgetAccounts, result] = await Promise.all([
     getUnits(supabase),
     getFiscalYears(supabase),
     getMaintenanceTypes(supabase),
+    getBudgetAccounts(supabase),
     listMaintenanceTransactions(supabase, {
       search: searchParams.search,
       status: searchParams.status,
       unitId: searchParams.unit,
       fiscalYearId: searchParams.fiscal_year,
       maintenanceTypeId: searchParams.type,
+      budgetAccountId: searchParams.account,
       page: searchParams.page ? Number(searchParams.page) : 1,
     }),
   ]);
@@ -61,12 +64,14 @@ export default async function MaintenancePage({
           units={units}
           fiscalYears={fiscalYears}
           maintenanceTypes={maintenanceTypes}
+          budgetAccounts={budgetAccounts}
           defaultValues={{
             search: searchParams.search,
             status: searchParams.status,
             unitId: searchParams.unit,
             fiscalYearId: searchParams.fiscal_year,
             maintenanceTypeId: searchParams.type,
+            budgetAccountId: searchParams.account,
           }}
         />
       </div>
